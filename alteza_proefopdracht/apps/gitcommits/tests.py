@@ -1,6 +1,6 @@
 from django.test import TestCase
 import pytest
-from .github import get_github_client
+from .github import get_branch_commits, get_github_client
 
 repo_name = "JochemKuipers/Alteza-Proefopdracht"
 
@@ -31,7 +31,7 @@ def test_get_branch_commits():
     if branches is None or len(list(branches)) == 0:
         assert False, "Branches should not be empty"
     branch = branches[0]
-    commits = branch.commit
+    commits = get_branch_commits(repo_name, branch.name)
     assert commits is not None
     assert len(list(commits)) > 0
     
@@ -43,7 +43,7 @@ def test_get_first_commit_message():
     if branches is None or len(list(branches)) == 0:
         assert False, "Branches should not be empty"
     branch_name = branches[0].name
-    commits = repo.get_commits(sha=branch_name)
+    commits = get_branch_commits(repo_name, branch_name)
     if commits is None or len(list(commits)) == 0:
         assert False, "Commits should not be empty"
     first_commit = commits[0]

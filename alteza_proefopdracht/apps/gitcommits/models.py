@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class GitRepository(models.Model):
     name = models.CharField(max_length=255)
     url = models.URLField()
@@ -21,7 +20,4 @@ class GitCommit(models.Model):
 
     def __str__(self):
         return f"{self.commit_hash} - {self.author}"
-    
-class GithubUser(models.Model):
-    name = models.CharField(max_length=255)
     
