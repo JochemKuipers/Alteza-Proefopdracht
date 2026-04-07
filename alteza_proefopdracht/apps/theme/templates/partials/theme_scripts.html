@@ -1,0 +1,31 @@
+<script>
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    function syncFromPreference() {
+      if ("theme" in localStorage) return;
+      root.classList.toggle("dark", mq.matches);
+    }
+    mq.addEventListener("change", syncFromPreference);
+
+    var btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+
+    function label() {
+      var dark = root.classList.contains("dark");
+      btn.setAttribute(
+        "aria-label",
+        dark ? "Switch to light theme" : "Switch to dark theme",
+      );
+      btn.setAttribute("title", dark ? "Use light theme" : "Use dark theme");
+    }
+    label();
+
+    btn.addEventListener("click", function () {
+      var nextDark = !root.classList.contains("dark");
+      root.classList.toggle("dark", nextDark);
+      localStorage.theme = nextDark ? "dark" : "light";
+      label();
+    });
+  })();
+</script>

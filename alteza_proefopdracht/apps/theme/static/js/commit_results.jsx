@@ -30,12 +30,12 @@ function CommitItem({ c, groupedMode }) {
 
   if (groupedMode) {
     return (
-      <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+      <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs text-slate-500">{metaBits}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{metaBits}</p>
         </div>
         <p
-          className="mt-1 text-xs text-slate-700 line-clamp-2"
+          className="mt-1 text-xs text-slate-700 line-clamp-2 dark:text-slate-300"
           title={hasMsg ? c.message : undefined}
         >
           {c.message || ""}
@@ -45,13 +45,13 @@ function CommitItem({ c, groupedMode }) {
   }
 
   return (
-    <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+    <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs font-semibold text-slate-900">{author}</p>
-        <p className="text-xs text-slate-500">{metaBits}</p>
+        <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">{author}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">{metaBits}</p>
       </div>
       <p
-        className="mt-1 text-xs text-slate-700 line-clamp-2"
+        className="mt-1 text-xs text-slate-700 line-clamp-2 dark:text-slate-300"
         title={hasMsg ? c.message : undefined}
       >
         {c.message || ""}
@@ -77,39 +77,39 @@ function AuthorGroup({ g }) {
 
   return (
     <li className="list-none">
-      <details className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+      <details className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <summary className="cursor-pointer list-none outline-none marker:content-none [&::-webkit-details-marker]:hidden">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-slate-900">
+              <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">
                 {g.author || "Unknown"}
               </p>
-              <p className="mt-0.5 text-xs text-slate-500">
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
                 {n} commit{n === 1 ? "" : "s"}
               </p>
               {latestLine ? (
-                <p className="mt-1 text-xs text-slate-600 commit-clamp-2">
+                <p className="mt-1 text-xs text-slate-600 commit-clamp-2 dark:text-slate-300">
                   {latestLine}
                 </p>
               ) : null}
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                 Show recent commits from scan
               </p>
             </div>
           </div>
         </summary>
-        <div className="mt-3 border-t border-slate-100 pt-3">
-          <p className="text-xs font-medium text-slate-500">
+        <div className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-700">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
             Recent commits (from scan)
           </p>
           {recent.length > 0 ? (
-            <ul className="mt-2 space-y-2 border-l-2 border-slate-200 pl-3">
+            <ul className="mt-2 space-y-2 border-l-2 border-slate-200 pl-3 dark:border-slate-600">
               {recent.map((c, i) => (
                 <CommitItem key={i} c={c} groupedMode />
               ))}
             </ul>
           ) : (
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
               No recent commits in this scan.
             </p>
           )}
@@ -244,8 +244,8 @@ function CommitResults({ apiUrl }) {
     <>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">Results</h2>
-          <p className="mt-1 text-xs text-slate-600">{metaText}</p>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Results</h2>
+          <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{metaText}</p>
         </div>
       </div>
       <div id="commit-results-scroll" className="commit-scroll mt-4">
@@ -261,7 +261,7 @@ function CommitResults({ apiUrl }) {
         <div className="flex flex-wrap items-center gap-2">
           <label
             htmlFor="commit-per-page"
-            className="text-xs font-medium text-slate-600"
+            className="text-xs font-medium text-slate-600 dark:text-slate-400"
           >
             Per page
           </label>
@@ -312,7 +312,7 @@ function CommitResults({ apiUrl }) {
           >
             Last
           </button>
-          <span className="text-xs text-slate-500">{status}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">{status}</span>
         </div>
       </div>
     </>

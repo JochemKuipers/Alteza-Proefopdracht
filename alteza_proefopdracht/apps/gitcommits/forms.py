@@ -50,7 +50,14 @@ class CommitSearchForm(forms.Form):
     group_by_author = forms.BooleanField(
         label="Group results by author",
         required=False,
-        widget=forms.CheckboxInput(attrs={"class": "h-4 w-4 rounded border-slate-300"}),
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": (
+                    "h-4 w-4 rounded border-slate-300 text-slate-900 "
+                    "dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100"
+                )
+            }
+        ),
     )
 
     def clean(self):

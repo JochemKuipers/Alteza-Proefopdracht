@@ -10,26 +10,28 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {% include "partials/theme_head.html" %}
         {% tailwind_css %}
         {% block extra_head %}
         {% endblock extra_head %}
     </head>
     <body class="min-h-dvh flex flex-col">
         <a href="#main"
-           class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow">
+           class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow dark:focus:bg-slate-900 dark:focus:text-slate-100">
             {% trans "Skip to content" %}
         </a>
-        <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur">
+        <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-800/80 dark:bg-slate-950/80">
             <div class="container-page flex h-16 items-center justify-between">
                 <div class="flex items-center gap-3">
                     <a href="{% url 'index' %}" class="no-underline">
-                        <span class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white">
+                        <span class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white dark:bg-slate-100 dark:text-slate-950">
                             Alteza
                         </span>
                     </a>
-                    <span class="hidden text-sm text-slate-500 sm:inline">GitHub commits viewer</span>
+                    <span class="hidden text-sm text-slate-500 sm:inline dark:text-slate-400">GitHub commits viewer</span>
                 </div>
                 <nav class="flex items-center gap-1">
+                    {% include "partials/theme_toggle.html" %}
                     <a class="nav-link" href="{% url 'index' %}">{% trans "Home" %}</a>
                     {% if request.user.is_authenticated %}
                         <a class="nav-link" href="{% url 'account_profile' %}">{% trans "Profile" %}</a>
@@ -49,7 +51,7 @@
                 {% if messages %}
                     <div class="mb-6 space-y-2">
                         {% for message in messages %}
-                            <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">{{ message }}</div>
+                            <div class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">{{ message }}</div>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -59,13 +61,13 @@
                 {% endblock body %}
             </div>
         </main>
-        <footer class="border-t border-slate-200 bg-white">
-            <div class="container-page py-8 text-sm text-slate-600">
+        <footer class="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
+            <div class="container-page py-8 text-sm text-slate-600 dark:text-slate-400">
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <p class="m-0">Alteza Proefopdracht</p>
                     <p class="m-0">
                         Built with Django + Tailwind ·
-                        <a class="text-slate-700 hover:text-slate-900"
+                        <a class="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
                            href="https://github.com"
                            target="_blank"
                            rel="noopener noreferrer">GitHub</a>
@@ -73,6 +75,7 @@
                 </div>
             </div>
         </footer>
+        {% include "partials/theme_scripts.html" %}
         {% block extra_body %}
         {% endblock extra_body %}
     </body>
