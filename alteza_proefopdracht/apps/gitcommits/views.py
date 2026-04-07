@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import datetime, time, timezone
-from typing import Any
+from typing import Any, cast
 
+from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.views import View
@@ -81,11 +82,14 @@ class IndexView(TemplateView):
         context["repo_loaded"] = True
 
         # Populate branch/author choices now that we know the repo.
-        form.fields["branch"].choices = [
+        branch_field = cast(forms.ChoiceField, form.fields["branch"])
+        author_field = cast(forms.ChoiceField, form.fields["author"])
+
+        branch_field.choices = [
             ("", "All branches"),
             *[(b, b) for b in branch_names],
         ]
-        form.fields["author"].choices = [("", "All authors")]
+        author_field.choices = [("", "All authors")]
 
         start_date = form.cleaned_data.get("start_date")
         end_date = form.cleaned_data.get("end_date")
@@ -120,7 +124,7 @@ class IndexView(TemplateView):
         # Build authors list for filtering.
         authors = sorted({c.author for c in commits if c.author})
         context["authors"] = authors
-        form.fields["author"].choices = [
+        author_field.choices = [
             ("", "All authors"),
             *[(a, a) for a in authors],
         ]
