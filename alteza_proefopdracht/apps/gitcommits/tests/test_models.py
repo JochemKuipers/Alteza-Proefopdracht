@@ -1,13 +1,15 @@
 from django.db.models.query import QuerySet
+from django.contrib.auth import get_user_model
 import pytest
 
-from alteza_proefopdracht.apps.gitcommits.models import GitRepository, GitUser
+from alteza_proefopdracht.apps.gitcommits.models import GitRepository
 
 repo_name = "django/django"
     
 @pytest.mark.django_db
 def test_git_user_get_repositories():
-    user = GitUser(username="JochemKuipers", email="jochem@kuipers.cc")
+    GitUser = get_user_model()
+    user = GitUser.objects.create_user(username="JochemKuipers", email="jochem@kuipers.cc")
     repositories = user.get_repositories()
     assert isinstance(repositories, QuerySet)
     assert repositories.count() >= 0

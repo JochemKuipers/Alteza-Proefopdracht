@@ -34,13 +34,19 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'tailwind',
     'alteza_proefopdracht.apps.theme',
-    'alteza_proefopdracht.apps.gitcommits',
+    'alteza_proefopdracht.apps.gitcommits.apps.GitcommitsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'alteza_proefopdracht.urls'
@@ -123,3 +130,27 @@ STATIC_URL = 'static/'
 GITHUB_API_KEY = env.str("GITHUB_API_KEY", default="")
 
 TAILWIND_APP_NAME = 'alteza_proefopdracht.apps.theme'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [
+            'user',
+            'repo',
+        ],
+    }
+}
+
+ACCOUNT_AUTO_SIGNUP = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+SITE_ID = 1
+AUTH_USER_MODEL = 'gitcommits.GitUser'
+
+# After successful login, Django defaults to /accounts/profile/ unless configured.
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"

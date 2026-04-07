@@ -17,7 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from alteza_proefopdracht.apps.gitcommits.views import ProfileView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/profile/', ProfileView.as_view(), name='account_profile'),
+    path('accounts/', include('allauth.urls')),
     path('', include('alteza_proefopdracht.apps.gitcommits.urls')),
 ]

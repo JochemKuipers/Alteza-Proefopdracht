@@ -10,7 +10,12 @@
       "request": "launch",
       "program": "${workspaceFolder}\\manage.py",
       "args": ["runserver"],
-      "django": true
+      "django": true,
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DJANGO_SETTINGS_MODULE": "alteza_proefopdracht.settings.local",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
     },
     {
       "name": "Python Debugger: Tests",
