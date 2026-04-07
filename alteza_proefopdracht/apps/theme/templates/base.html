@@ -7,9 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {% tailwind_css %}
+    {% block extra_head %}{% endblock extra_head %}
 </head>
-
+{% block extra_styles%}{% endblock extra_styles%}
 <body class="bg-gray-50 text-black font-serif leading-normal tracking-normal">
     {% block content %}{% endblock content %}
 </body>
 </html>
+{% block extra_scripts %}{% endblock extra_scripts %}
