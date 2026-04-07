@@ -126,8 +126,6 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-GITHUB_API_KEY = env.str("GITHUB_API_KEY", default="")
-
 TAILWIND_APP_NAME = "alteza_proefopdracht.apps.theme"
 
 AUTHENTICATION_BACKENDS = [
@@ -144,12 +142,13 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+SOCIALACCOUNT_STORE_TOKENS = True
+
 ACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_LOGIN_METHODS = {"email", "username"}
 SITE_ID = 1
 AUTH_USER_MODEL = "gitcommits.GitUser"
 
-# After successful login, Django defaults to /accounts/profile/ unless configured.
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
