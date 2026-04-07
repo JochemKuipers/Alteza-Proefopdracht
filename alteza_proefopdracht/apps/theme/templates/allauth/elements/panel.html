@@ -1,0 +1,23 @@
+{% load allauth %}
+<section class="card">
+  <div class="text-center">
+    {% if slots.title %}
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        {% slot title %}{% endslot %}
+      </h1>
+    {% endif %}
+    {% if slots.body %}
+      <div class="mt-4 text-sm text-slate-700">
+        {% slot body %}{% endslot %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if slots.actions %}
+    <div class="mt-8 flex flex-col gap-3">
+      {% for action in slots.actions %}
+        {{ action }}
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
