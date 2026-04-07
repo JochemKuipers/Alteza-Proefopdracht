@@ -1,7 +1,7 @@
 [project]
 name = "alteza-proefopdracht"
 version = "0.1.0"
-description = "Add your description here"
+description = "A Django application to fetch and display GitHub commits for a specified repository."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
@@ -16,3 +16,8 @@ dependencies = [
     "pytest-xdist>=3.8.0",
     "ruff>=0.15.9",
 ]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "alteza_proefopdracht.settings.tests"
+python_files = "tests.py test_*.py *_tests.py"
+addopts = "-v --tb=short -n auto"

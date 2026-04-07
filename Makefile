@@ -6,6 +6,9 @@ install:
 migrate:
 	uv run manage.py migrate
 
+makemigrations:
+	uv run manage.py makemigrations
+
 run:
 	uv run manage.py runserver --settings=alteza_proefopdracht.settings.local
 
@@ -13,4 +16,4 @@ run-tailwind:
 	uv run manage.py tailwind start
 
 test:
-	uv run manage.py test --settings=alteza_proefopdracht.settings.tests
+	uv run pytest
