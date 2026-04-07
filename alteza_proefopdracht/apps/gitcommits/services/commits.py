@@ -6,6 +6,7 @@ from typing import Any
 
 from .. import github
 
+DEFAULT_COMMITS_PER_PAGE = 6
 SCAN_PER_PAGE = 100
 MAX_SCAN_PAGES_AUTHOR = 50
 MAX_SCAN_PAGES_GROUPED = 200
@@ -16,7 +17,6 @@ class CommitPage:
     results: list[dict[str, Any]]
     count: int | None
     page: int
-    per_page: int
     has_next: bool
     has_prev: bool
     grouped: bool
@@ -29,7 +29,6 @@ def get_flat_commits(
     until: datetime,
     token: str | None,
     page: int,
-    per_page: int,
 ) -> CommitPage:
     commits, total = github.get_branch_commits(
         repo_name=repo,
@@ -38,7 +37,6 @@ def get_flat_commits(
         until=until,
         token=token,
         page=page,
-        per_page=per_page,
     )
     commits.sort(
         key=lambda c: c.date or datetime.min.replace(tzinfo=timezone.utc),
@@ -48,8 +46,7 @@ def get_flat_commits(
         results=[_serialize_commit(c) for c in commits],
         count=total,
         page=page,
-        per_page=per_page,
-        has_next=page * per_page < total,
+        has_next=page * DEFAULT_COMMITS_PER_PAGE < total,
         has_prev=page > 1,
         grouped=False,
     )
@@ -62,12 +59,11 @@ def get_author_filtered_commits(
     until: datetime,
     token: str | None,
     page: int,
-    per_page: int,
     author: str,
 ) -> CommitPage:
     author_norm = author.strip().lower()
-    want_start = (page - 1) * per_page
-    want_end_exclusive = want_start + per_page
+    want_start = (page - 1) * DEFAULT_COMMITS_PER_PAGE
+    want_end_exclusive = want_start + DEFAULT_COMMITS_PER_PAGE
     matched: list = []
     scan_page = 1
     total_unfiltered: int | None = None
@@ -103,7 +99,6 @@ def get_author_filtered_commits(
         results=[_serialize_commit(c) for c in page_commits],
         count=None,
         page=page,
-        per_page=per_page,
         has_next=len(matched) > want_end_exclusive,
         has_prev=page > 1,
         grouped=False,
@@ -117,7 +112,6 @@ def get_grouped_by_author(
     until: datetime,
     token: str | None,
     page: int,
-    per_page: int,
 ) -> CommitPage:
     author_stats: dict[str, dict[str, Any]] = {}
     scan_page = 1
@@ -146,15 +140,14 @@ def get_grouped_by_author(
         author_stats.values(),
         key=lambda d: (-int(d["count"]), str(d["author"]).lower()),
     )
-    start = (page - 1) * per_page
-    end = start + per_page
+    start = (page - 1) * DEFAULT_COMMITS_PER_PAGE
+    end = start + DEFAULT_COMMITS_PER_PAGE
     page_rows = grouped[start:end]
 
     return CommitPage(
         results=[_grouped_author_row_to_api(it) for it in page_rows],
         count=len(grouped),
         page=page,
-        per_page=per_page,
         has_next=end < len(grouped),
         has_prev=page > 1,
         grouped=True,

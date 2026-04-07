@@ -32,7 +32,9 @@ function CommitItem({ c, groupedMode }) {
     return (
       <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs text-slate-500 dark:text-slate-400">{metaBits}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            {metaBits}
+          </p>
         </div>
         <p
           className="mt-1 text-xs text-slate-700 line-clamp-2 dark:text-slate-300"
@@ -47,7 +49,9 @@ function CommitItem({ c, groupedMode }) {
   return (
     <li className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">{author}</p>
+        <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">
+          {author}
+        </p>
         <p className="text-xs text-slate-500 dark:text-slate-400">{metaBits}</p>
       </div>
       <p
@@ -244,8 +248,12 @@ function CommitResults({ apiUrl }) {
     <>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Results</h2>
-          <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{metaText}</p>
+          <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+            Results
+          </h2>
+          <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+            {metaText}
+          </p>
         </div>
       </div>
       <div id="commit-results-scroll" className="commit-scroll mt-4">
@@ -258,24 +266,6 @@ function CommitResults({ apiUrl }) {
         </ul>
       </div>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
-          <label
-            htmlFor="commit-per-page"
-            className="text-xs font-medium text-slate-600 dark:text-slate-400"
-          >
-            Per page
-          </label>
-          <select
-            id="commit-per-page"
-            className="form-control max-w-[5.5rem] py-1.5 text-sm"
-            value={String(perPage)}
-            onChange={onPerPageChange}
-          >
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
-        </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -312,7 +302,9 @@ function CommitResults({ apiUrl }) {
           >
             Last
           </button>
-          <span className="text-xs text-slate-500 dark:text-slate-400">{status}</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">
+            {status}
+          </span>
         </div>
       </div>
     </>

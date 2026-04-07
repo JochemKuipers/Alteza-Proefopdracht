@@ -22,7 +22,7 @@ from .services.commits import (
     get_grouped_by_author,
 )
 
-DEFAULT_COMMITS_PER_PAGE = 25
+DEFAULT_COMMITS_PER_PAGE = 6
 # GitHub commit listing allows up to 100 per page; cap client requests for safety.
 MAX_COMMITS_PER_PAGE = 100
 
@@ -64,7 +64,6 @@ class CommitsView(APIView):
     - start_date / end_date (optional, YYYY-MM-DD)
     - author (optional, exact match)
     - page (default 1)
-    - per_page (optional, default 25, max 100)
     """
 
     authentication_classes = [SessionAuthentication]
@@ -79,7 +78,7 @@ class CommitsView(APIView):
         if not form.is_valid():
             return Response({"detail": "Invalid parameters", "errors": form.errors}, status=400)
 
-        page, per_page = self._parse_pagination(request)
+        page = self._parse_pagination(request)
         since, until = self._parse_dates(form)
 
         branch = (form.cleaned_data.get("branch") or "").strip() or None
@@ -90,7 +89,7 @@ class CommitsView(APIView):
         try:
             if group_by_author:
                 result = get_grouped_by_author(
-                    repo_name, branch, since, until, token, page, per_page
+                    repo_name, branch, since, until, token, page
                 )
             elif author:
                 result = get_author_filtered_commits(
@@ -100,12 +99,11 @@ class CommitsView(APIView):
                     until,
                     token,
                     page,
-                    per_page,
                     author,
                 )
             else:
                 result = get_flat_commits(
-                    repo_name, branch, since, until, token, page, per_page
+                    repo_name, branch, since, until, token, page
                 )
         except Exception as exc:  # noqa: BLE001 - surface API errors to UI
             return Response({"detail": str(exc)}, status=502)
@@ -114,15 +112,14 @@ class CommitsView(APIView):
             {
                 "grouped": result.grouped,
                 "count": result.count,
-                "next": self._page_url(request, page + 1, per_page)
+                "next": self._page_url(request, page + 1)
                 if result.has_next
                 else None,
-                "previous": self._page_url(request, page - 1, per_page)
+                "previous": self._page_url(request, page - 1)
                 if result.has_prev
                 else None,
                 "results": result.results,
                 "page": result.page,
-                "per_page": result.per_page,
             }
         )
 
@@ -131,16 +128,9 @@ class CommitsView(APIView):
             page = int(request.query_params.get("page") or "1")
         except ValueError:
             page = 1
-        try:
-            per_page = int(
-                request.query_params.get("per_page") or str(DEFAULT_COMMITS_PER_PAGE)
-            )
-        except ValueError:
-            per_page = DEFAULT_COMMITS_PER_PAGE
 
         page = max(page, 1)
-        per_page = min(max(per_page, 1), MAX_COMMITS_PER_PAGE)
-        return page, per_page
+        return page
 
     def _parse_dates(self, form):
         start_date = form.cleaned_data.get("start_date")
@@ -157,10 +147,9 @@ class CommitsView(APIView):
         )
         return since, until
 
-    def _page_url(self, request, new_page: int, per_page: int) -> str:
+    def _page_url(self, request, new_page: int) -> str:
         q = request.query_params.copy()
         q["page"] = str(new_page)
-        q["per_page"] = str(per_page)
         base = request.build_absolute_uri(request.path)
         return f"{base}?{q.urlencode()}"
 
