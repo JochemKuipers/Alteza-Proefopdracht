@@ -36,11 +36,16 @@ class CommitSearchForm(forms.Form):
         choices=[],
         widget=forms.Select(attrs={"class": "form-control"}),
     )
-    author = forms.ChoiceField(
+    author = forms.CharField(
         label="Author",
         required=False,
-        choices=[],
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Any author (optional)",
+                "autocomplete": "off",
+            }
+        ),
     )
     group_by_author = forms.BooleanField(
         label="Group results by author",
@@ -49,7 +54,7 @@ class CommitSearchForm(forms.Form):
     )
 
     def clean(self):
-        cleaned = super().clean()
+        cleaned = super().clean() or {}
         start: date | None = cleaned.get("start_date")
         end: date | None = cleaned.get("end_date")
         if start and end and start > end:

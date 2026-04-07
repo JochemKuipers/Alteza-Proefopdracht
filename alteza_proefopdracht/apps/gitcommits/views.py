@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from collections import defaultdict
 from datetime import datetime, time, timezone
-from typing import Any, cast
+from typing import cast
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,10 +10,16 @@ from django.views import View
 from django.views.generic import TemplateView
 
 from allauth.socialaccount.models import SocialToken
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from . import github
 from .forms import CommitSearchForm
 from .models import GitUser
+
+DEFAULT_COMMITS_PER_PAGE = 6
+MAX_COMMITS_PER_PAGE = 6
 
 
 def _get_github_oauth_token(user) -> str | None:
@@ -42,6 +47,115 @@ class RepoSuggestView(View):
         except Exception:
             items = []
         return JsonResponse({"items": items})
+
+
+class CommitsView(APIView):
+    """
+    DRF paginated endpoint.
+
+    Query params:
+    - repo (required): owner/repo
+    - branch (optional)
+    - start_date / end_date (optional, YYYY-MM-DD)
+    - author (optional, exact match)
+    - page (default 1)
+    - per_page is fixed at 5
+    """
+
+    # Use session auth so `request.user` is populated for logged-in users.
+    # Without this, we always fall back to unauthenticated GitHub requests (low rate limits).
+    authentication_classes = [SessionAuthentication]
+    permission_classes: list = []
+
+    def get(self, request, *args, **kwargs):
+        repo_name = (request.query_params.get("repo") or "").strip()
+        if not repo_name:
+            return Response({"detail": "Missing repo"}, status=400)
+
+        form = CommitSearchForm(request.query_params)
+        if not form.is_valid():
+            return Response({"detail": "Invalid parameters", "errors": form.errors}, status=400)
+
+        try:
+            page = int(request.query_params.get("page") or "1")
+        except ValueError:
+            page = 1
+        per_page = DEFAULT_COMMITS_PER_PAGE
+
+        page = max(page, 1)
+        per_page = min(max(per_page, 1), MAX_COMMITS_PER_PAGE)
+
+        start_date = form.cleaned_data.get("start_date")
+        end_date = form.cleaned_data.get("end_date")
+        since = (
+            datetime.combine(start_date, time.min, tzinfo=timezone.utc)
+            if start_date
+            else datetime.min.replace(tzinfo=timezone.utc)
+        )
+        until = (
+            datetime.combine(end_date, time.max, tzinfo=timezone.utc)
+            if end_date
+            else datetime.max.replace(tzinfo=timezone.utc)
+        )
+
+        branch = form.cleaned_data.get("branch") or None
+        author = (form.cleaned_data.get("author") or "").strip() or None
+
+        token = _get_github_oauth_token(request.user)
+        try:
+            commits, total = github.get_branch_commits_with_total(
+                repo_name=repo_name,
+                branch_name=branch,
+                since=since,
+                until=until,
+                token=token,
+                page=page,
+                per_page=per_page,
+            )
+        except Exception as exc:  # noqa: BLE001 - surface API errors to UI
+            return Response({"detail": str(exc)}, status=502)
+
+        if author:
+            commits = [c for c in commits if (c.author or "").strip() == author]
+            # total becomes "unknown" after filtering client-side; keep it conservative.
+            total = len(commits) if page == 1 else total
+
+        commits.sort(
+            key=lambda c: c.date or datetime.min.replace(tzinfo=timezone.utc),
+            reverse=True,
+        )
+
+        results = [
+            {
+                "sha": c.commit_hash,
+                "sha7": (c.commit_hash or "")[:7],
+                "message": c.message,
+                "author": c.author or "Unknown",
+                "date": c.date.isoformat() if getattr(c, "date", None) else None,
+            }
+            for c in commits
+        ]
+
+        def build_page_url(new_page: int) -> str:
+            q = request.query_params.copy()
+            q["page"] = str(new_page)
+            q["per_page"] = str(per_page)
+            base = request.build_absolute_uri(request.path)
+            return f"{base}?{q.urlencode()}"
+
+        next_url = build_page_url(page + 1) if page * per_page < total else None
+        prev_url = build_page_url(page - 1) if page > 1 else None
+
+        return Response(
+            {
+                "count": total,
+                "next": next_url,
+                "previous": prev_url,
+                "results": results,
+                "page": page,
+                "per_page": per_page,
+            }
+        )
 
 
 class IndexView(TemplateView):
@@ -83,76 +197,16 @@ class IndexView(TemplateView):
 
         # Populate branch/author choices now that we know the repo.
         branch_field = cast(forms.ChoiceField, form.fields["branch"])
-        author_field = cast(forms.ChoiceField, form.fields["author"])
 
         branch_field.choices = [
             ("", "All branches"),
             *[(b, b) for b in branch_names],
         ]
-        author_field.choices = [("", "All authors")]
-
-        start_date = form.cleaned_data.get("start_date")
-        end_date = form.cleaned_data.get("end_date")
-        since = (
-            datetime.combine(start_date, time.min, tzinfo=timezone.utc)
-            if start_date
-            else datetime.min.replace(tzinfo=timezone.utc)
-        )
-        until = (
-            datetime.combine(end_date, time.max, tzinfo=timezone.utc)
-            if end_date
-            else datetime.max.replace(tzinfo=timezone.utc)
-        )
-
-        branch = form.cleaned_data.get("branch") or None
-        author = form.cleaned_data.get("author") or None
-
-        try:
-            commits = github.get_branch_commits(
-                repo_name=repo_name,
-                branch_name=branch,
-                since=since,
-                until=until,
-                token=token,
-                page=1,
-                per_page=100,
-            )
-        except Exception as exc:
-            context["error"] = str(exc)
-            return context
-
-        # Build authors list for filtering.
-        authors = sorted({c.author for c in commits if c.author})
-        context["authors"] = authors
-        author_field.choices = [
-            ("", "All authors"),
-            *[(a, a) for a in authors],
-        ]
-
-        if author:
-            commits = [c for c in commits if c.author == author]
-
-        # Sort newest first.
-        commits.sort(
-            key=lambda c: c.date or datetime.min.replace(tzinfo=timezone.utc),
-            reverse=True,
-        )
-        context["commits"] = commits
-
-        group_by_author = bool(form.cleaned_data.get("group_by_author")) or bool(author)
-        context["group_by_author"] = group_by_author
-
-        if group_by_author:
-            grouped: dict[str, list[Any]] = defaultdict(list)
-            for c in commits:
-                author_name = getattr(c, "author", None) or "Unknown"
-                grouped[str(author_name)].append(c)
-            context["grouped_commits"] = [
-                {"author": a, "count": len(items), "commits": items}
-                for a, items in sorted(
-                    grouped.items(), key=lambda kv: (-len(kv[1]), str(kv[0]).lower())
-                )
-            ]
+        # Commits are loaded client-side via the DRF paginated endpoint.
+        context["commits"] = []
+        context["authors"] = []
+        context["grouped_commits"] = []
+        context["group_by_author"] = False
 
         return context
 

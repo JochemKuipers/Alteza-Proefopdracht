@@ -10,8 +10,8 @@ from alteza_proefopdracht.apps.gitcommits.models import (
     GitCommit,
 )
 
-DEFAULT_COMMITS_PER_PAGE = 30
-MAX_COMMITS_PER_PAGE = 100
+DEFAULT_COMMITS_PER_PAGE = 6
+MAX_COMMITS_PER_PAGE = 6
 DEFAULT_REPO_SUGGESTION_LIMIT = 8
 
 
@@ -149,3 +149,48 @@ def get_branch_commits(
         )
         for commit in commit_page
     ]
+
+
+def get_branch_commits_with_total(
+    repo_name: str,
+    branch_name: Optional[str],
+    since: Opt[datetime] = datetime.min,
+    until: Opt[datetime] = datetime.max,
+    *,
+    token: str | None = None,
+    page: int = 1,
+    per_page: int = DEFAULT_COMMITS_PER_PAGE,
+) -> tuple[list[GitCommit], int]:
+    """
+    Fetch a single page of commits plus GitHub's reported total count.
+
+    PyGithub exposes the total through PaginatedList.totalCount (may trigger an extra API call).
+    """
+    page = max(page, 1)
+    per_page = min(max(per_page, 1), MAX_COMMITS_PER_PAGE)
+
+    client = get_github_client(token=token, per_page=per_page)
+    github_repo = client.get_repo(repo_name)
+    repo = GitRepository(
+        name=github_repo.name, full_name=github_repo.full_name, url=github_repo.html_url
+    )
+    commits = (
+        github_repo.get_commits(sha=branch_name, since=since, until=until)
+        if branch_name
+        else github_repo.get_commits(since=since, until=until)
+    )
+
+    total = int(getattr(commits, "totalCount", 0) or 0)
+    commit_page = commits.get_page(page - 1)
+
+    items = [
+        GitCommit(
+            repository=repo,
+            commit_hash=commit.sha,
+            message=commit.commit.message,
+            author=commit.commit.author.name if commit.commit.author else "Unknown",
+            date=commit.commit.author.date if commit.commit.author else None,
+        )
+        for commit in commit_page
+    ]
+    return items, total

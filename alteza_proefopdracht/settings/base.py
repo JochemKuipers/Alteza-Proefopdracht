@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "rest_framework",
     "tailwind",
     "alteza_proefopdracht.apps.theme",
     "alteza_proefopdracht.apps.gitcommits.apps.GitcommitsConfig",
