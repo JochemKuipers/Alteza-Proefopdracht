@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.utils import timezone
 
 import pytest
@@ -14,33 +13,38 @@ repo_name = "django/django"
 
 client = get_github_client()
 
+
 @pytest.mark.django_db
 def test_get_repo():
     repo = get_repository(repo_name)
     assert repo is not None
     assert repo.full_name == repo_name
-    
+
+
 @pytest.mark.django_db
 def test_get_repo_invalid():
     with pytest.raises(Exception):
         get_repository("invalid/repo")
- 
-@pytest.mark.django_db       
+
+
+@pytest.mark.django_db
 def test_get_user_repositories():
     repositories = get_user_repositories()
     assert repositories is not None
     assert len(repositories) > 0
 
+
 @pytest.mark.django_db
 def test_get_repo_branches():
-    repo = get_repository(repo_name)    
+    repo = get_repository(repo_name)
     if repo is None:
         assert False, "Repository should not be None"
     branches = get_repository_branches(repo_name)
     assert branches is not None
     assert len(branches) > 0
-   
-@pytest.mark.django_db 
+
+
+@pytest.mark.django_db
 def test_get_branch_commits():
     repo = get_repository(repo_name)
     if repo is None:
@@ -52,7 +56,8 @@ def test_get_branch_commits():
     commits = get_branch_commits(repo_name, branch.name)
     assert commits is not None
     assert len(list(commits)) > 0
-    
+
+
 @pytest.mark.django_db
 def test_get_first_commit_message():
     repo = get_repository(repo_name)
@@ -67,7 +72,8 @@ def test_get_first_commit_message():
         assert False, "Commits should not be empty"
     first_commit = commits[0]
     assert first_commit.message is not None
-    
+
+
 @pytest.mark.django_db
 def test_get_first_commit_author():
     repo = get_repository(repo_name)
@@ -83,6 +89,7 @@ def test_get_first_commit_author():
     first_commit = commits[0]
     assert first_commit.author is not None
 
+
 @pytest.mark.django_db
 def test_get_first_commit_date():
     repo = get_repository(repo_name)
@@ -97,8 +104,9 @@ def test_get_first_commit_date():
         assert False, "Commits should not be empty"
     first_commit = commits[0]
     assert first_commit.date is not None
-   
-@pytest.mark.django_db 
+
+
+@pytest.mark.django_db
 def test_get_commits_since_date():
     repo = get_repository(repo_name)
     if repo is None:
@@ -112,8 +120,9 @@ def test_get_commits_since_date():
     assert commits is not None
     for commit in commits:
         assert commit.date > since_date
-    
-@pytest.mark.django_db    
+
+
+@pytest.mark.django_db
 def test_get_commits_until_date():
     repo = get_repository(repo_name)
     if repo is None:

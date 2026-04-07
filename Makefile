@@ -22,3 +22,10 @@ reset:
 	uv run manage.py flush --no-input
 	uv run manage.py migrate
 	DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_EMAIL=admin@example.com DJANGO_SUPERUSER_PASSWORD=admin uv run manage.py createsuperuser --noinput
+
+lint:
+	uv run ruff check . --fix
+
+format:
+	uv run ruff format .
+	uv run djlint --reformat .

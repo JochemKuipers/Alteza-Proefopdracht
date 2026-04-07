@@ -22,3 +22,12 @@ dependencies = [
 DJANGO_SETTINGS_MODULE = "alteza_proefopdracht.settings.tests"
 python_files = "tests.py test_*.py *_tests.py"
 addopts = "-v --tb=short -n auto"
+
+[dependency-groups]
+dev = [
+    "django-stubs[compatible-mypy]>=6.0.2",
+    "djlint>=1.36.4",
+]
+
+[tool.djlint]
+profile="django"

@@ -1,3 +1,3 @@
-from alteza_proefopdracht.settings.base import * # noqa
+from alteza_proefopdracht.settings.base import *  # noqa
 
 DEBUG = True

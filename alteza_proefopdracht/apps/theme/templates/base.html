@@ -1,63 +1,72 @@
 {% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>{% block title %}Alteza Proefopdracht{% endblock title %}</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% tailwind_css %}
-    {% block extra_head %}{% endblock extra_head %}
-</head>
-<body class="min-h-dvh flex flex-col">
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow">
-        Skip to content
-    </a>
-
-    <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur">
-        <div class="container-page flex h-16 items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="{% url 'index' %}" class="no-underline">
-                    <span class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white">
-                        Alteza
-                    </span>
-                </a>
-                <span class="hidden text-sm text-slate-500 sm:inline">GitHub commits viewer</span>
+    <head>
+        <title>
+            {% block title %}
+                Alteza Proefopdracht
+            {% endblock title %}
+        </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="description" content="GitHub commits viewer">
+        <meta name="keywords" content="GitHub, commits, viewer">
+        {% tailwind_css %}
+        {% block extra_head %}
+        {% endblock extra_head %}
+    </head>
+    <body class="min-h-dvh flex flex-col">
+        <a href="#main"
+           class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow">
+            Skip to content
+        </a>
+        <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur">
+            <div class="container-page flex h-16 items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'index' %}" class="no-underline">
+                        <span class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white">
+                            Alteza
+                        </span>
+                    </a>
+                    <span class="hidden text-sm text-slate-500 sm:inline">GitHub commits viewer</span>
+                </div>
+                <nav class="flex items-center gap-1">
+                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'account_profile' %}">Profile</a>
+                        <form method="post" action="{% url 'account_logout' %}" class="ml-1">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-secondary">Log out</button>
+                        </form>
+                    {% else %}
+                        <a class="btn-primary ml-1 no-underline"
+                           href="{% url 'account_login' %}">Log in</a>
+                    {% endif %}
+                </nav>
             </div>
-
-            <nav class="flex items-center gap-1">
-                <a class="nav-link" href="{% url 'index' %}">Home</a>
-
-                {% if request.user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'account_profile' %}">Profile</a>
-                    <form method="post" action="{% url 'account_logout' %}" class="ml-1">
-                        {% csrf_token %}
-                        <button type="submit" class="btn-secondary">Log out</button>
-                    </form>
-                {% else %}
-                    <a class="btn-primary ml-1 no-underline" href="{% url 'account_login' %}">Log in</a>
-                {% endif %}
-            </nav>
-        </div>
-    </header>
-
-    {% block extra_styles %}{% endblock extra_styles %}
-
-    <main id="main" class="flex-1 py-10 sm:py-12">
-        {% block content %}{% endblock content %}
-    </main>
-
-    <footer class="border-t border-slate-200 bg-white">
-        <div class="container-page py-8 text-sm text-slate-600">
-            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <p class="m-0">Alteza Proefopdracht</p>
-                <p class="m-0">
-                    Built with Django + Tailwind ·
-                    <a class="text-slate-700 hover:text-slate-900" href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
-                </p>
+        </header>
+        {% block extra_styles %}
+        {% endblock extra_styles %}
+        <main id="main" class="flex-1 py-10 sm:py-12">
+            {% block content %}
+            {% endblock content %}
+        </main>
+        <footer class="border-t border-slate-200 bg-white">
+            <div class="container-page py-8 text-sm text-slate-600">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="m-0">Alteza Proefopdracht</p>
+                    <p class="m-0">
+                        Built with Django + Tailwind ·
+                        <a class="text-slate-700 hover:text-slate-900"
+                           href="https://github.com"
+                           target="_blank"
+                           rel="noopener noreferrer">GitHub</a>
+                    </p>
+                </div>
             </div>
-        </div>
-    </footer>
-</body>
+        </footer>
+    </body>
 </html>
-{% block extra_scripts %}{% endblock extra_scripts %}
+{% block extra_scripts %}
+{% endblock extra_scripts %}
