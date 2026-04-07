@@ -16,7 +16,7 @@ from .forms import CommitSearchForm
 from .models import GitUser
 
 
-def _get_github_oauth_token(user: GitUser) -> str | None:
+def _get_github_oauth_token(user) -> str | None:
     if not user or not getattr(user, "is_authenticated", False):
         return None
     try:
