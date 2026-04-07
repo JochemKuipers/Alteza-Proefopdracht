@@ -11,7 +11,9 @@ from alteza_proefopdracht.apps.gitcommits.models import (
 )
 
 DEFAULT_COMMITS_PER_PAGE = 6
-MAX_COMMITS_PER_PAGE = 6
+# For UI we page with 6, but for server-side filtering we may scan with larger pages
+# to avoid excessive API calls.
+MAX_COMMITS_PER_PAGE = 100
 DEFAULT_REPO_SUGGESTION_LIMIT = 8
 
 
@@ -113,7 +115,6 @@ def get_repository_branches(
 
     return [GitBranch(repository=repo, name=branch.name) for branch in branches]
 
-
 def get_branch_commits(
     repo_name: str,
     branch_name: Optional[str],
@@ -123,49 +124,7 @@ def get_branch_commits(
     token: str | None = None,
     page: int = 1,
     per_page: int = DEFAULT_COMMITS_PER_PAGE,
-) -> list[GitCommit]:
-    page = max(page, 1)
-    per_page = min(max(per_page, 1), MAX_COMMITS_PER_PAGE)
-
-    client = get_github_client(token=token, per_page=per_page)
-    github_repo = client.get_repo(repo_name)
-    repo = GitRepository(
-        name=github_repo.name, full_name=github_repo.full_name, url=github_repo.html_url
-    )
-    commits = (
-        github_repo.get_commits(sha=branch_name, since=since, until=until)
-        if branch_name
-        else github_repo.get_commits(since=since, until=until)
-    )
-    commit_page = commits.get_page(page - 1)
-
-    return [
-        GitCommit(
-            repository=repo,
-            commit_hash=commit.sha,
-            message=commit.commit.message,
-            author=commit.commit.author.name if commit.commit.author else "Unknown",
-            date=commit.commit.author.date if commit.commit.author else None,
-        )
-        for commit in commit_page
-    ]
-
-
-def get_branch_commits_with_total(
-    repo_name: str,
-    branch_name: Optional[str],
-    since: Opt[datetime] = datetime.min,
-    until: Opt[datetime] = datetime.max,
-    *,
-    token: str | None = None,
-    page: int = 1,
-    per_page: int = DEFAULT_COMMITS_PER_PAGE,
 ) -> tuple[list[GitCommit], int]:
-    """
-    Fetch a single page of commits plus GitHub's reported total count.
-
-    PyGithub exposes the total through PaginatedList.totalCount (may trigger an extra API call).
-    """
     page = max(page, 1)
     per_page = min(max(per_page, 1), MAX_COMMITS_PER_PAGE)
 
@@ -174,9 +133,18 @@ def get_branch_commits_with_total(
     repo = GitRepository(
         name=github_repo.name, full_name=github_repo.full_name, url=github_repo.html_url
     )
+    sha: Optional[str] = None
+    if branch_name:
+        # Resolve branch names with slashes (e.g. "stable/6.0.x") to a commit SHA first.
+        # This avoids subtle encoding/interpretation issues in the commits API.
+        try:
+            sha = github_repo.get_branch(branch_name).commit.sha
+        except Exception:
+            sha = branch_name
+
     commits = (
-        github_repo.get_commits(sha=branch_name, since=since, until=until)
-        if branch_name
+        github_repo.get_commits(sha=sha, since=since, until=until)
+        if sha
         else github_repo.get_commits(since=since, until=until)
     )
 

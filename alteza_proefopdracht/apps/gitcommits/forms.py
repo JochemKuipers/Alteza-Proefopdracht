@@ -60,3 +60,28 @@ class CommitSearchForm(forms.Form):
         if start and end and start > end:
             self.add_error("end_date", "End date must be on or after the start date.")
         return cleaned
+
+
+class CommitSearchApiForm(forms.Form):
+    """
+    API-facing validation.
+
+    The HTML form hydrates `branch` as a ChoiceField only after loading repo branches.
+    The API endpoint should still accept arbitrary branch strings (e.g. `stable/6.0.x`)
+    and let GitHub decide whether the ref exists.
+    """
+
+    repo = forms.CharField(required=True)
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+    branch = forms.CharField(required=False)
+    author = forms.CharField(required=False)
+    group_by_author = forms.BooleanField(required=False)
+
+    def clean(self):
+        cleaned = super().clean() or {}
+        start: date | None = cleaned.get("start_date")
+        end: date | None = cleaned.get("end_date")
+        if start and end and start > end:
+            self.add_error("end_date", "End date must be on or after the start date.")
+        return cleaned
