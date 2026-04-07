@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class GitcommitsConfig(AppConfig):
-    name = 'gitcommits'
+    name = 'alteza_proefopdracht.apps.gitcommits'

@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'tailwind',
+    'alteza_proefopdracht.apps.theme',
+    'alteza_proefopdracht.apps.gitcommits',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -118,3 +121,5 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 GITHUB_API_KEY = env.str("GITHUB_API_KEY", default="")
+
+TAILWIND_APP_NAME = 'alteza_proefopdracht.apps.theme'
