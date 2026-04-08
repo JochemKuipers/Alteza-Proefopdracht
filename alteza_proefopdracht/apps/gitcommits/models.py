@@ -1,4 +1,3 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -67,18 +66,3 @@ class GitCommit(models.Model):
 
     def __str__(self):
         return f"{self.commit_hash} - {self.author}"
-
-
-class GitUser(AbstractUser):
-    def get_repositories(self):
-        repositories = GitRepository.objects.filter(
-            commits__author=self.username
-        ).distinct()
-        if not repositories.exists():
-            from alteza_proefopdracht.apps.gitcommits import github
-
-            github.get_user_repositories()
-            repositories = GitRepository.objects.filter(
-                commits__author=self.username
-            ).distinct()
-        return repositories

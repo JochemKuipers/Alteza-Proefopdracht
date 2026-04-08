@@ -19,9 +19,9 @@ test:
 	uv run pytest
 
 reset:
-	uv run manage.py flush --no-input
+	cmd /C "if exist alteza_proefopdracht\db.sqlite3 del /F /Q alteza_proefopdracht\db.sqlite3"
 	uv run manage.py migrate
-	DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_EMAIL=admin@example.com DJANGO_SUPERUSER_PASSWORD=admin uv run manage.py createsuperuser --noinput
+	uv run manage.py post_reset_db
 
 lint:
 	uv run ruff check . --fix
@@ -29,3 +29,9 @@ lint:
 format:
 	uv run ruff format .
 	uv run djlint --reformat .
+
+makemessages:
+	uv run manage.py makemessages -l nl
+
+compilemessages:
+	uv run manage.py compilemessages

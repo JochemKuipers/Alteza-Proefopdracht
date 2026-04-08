@@ -76,7 +76,9 @@ class CommitsView(APIView):
 
         form = CommitSearchApiForm(request.query_params)
         if not form.is_valid():
-            return Response({"detail": "Invalid parameters", "errors": form.errors}, status=400)
+            return Response(
+                {"detail": "Invalid parameters", "errors": form.errors}, status=400
+            )
 
         page = self._parse_pagination(request)
         since, until = self._parse_dates(form)
@@ -102,9 +104,7 @@ class CommitsView(APIView):
                     author,
                 )
             else:
-                result = get_flat_commits(
-                    repo_name, branch, since, until, token, page
-                )
+                result = get_flat_commits(repo_name, branch, since, until, token, page)
         except Exception as exc:  # noqa: BLE001 - surface API errors to UI
             return Response({"detail": str(exc)}, status=502)
 
@@ -112,9 +112,7 @@ class CommitsView(APIView):
             {
                 "grouped": result.grouped,
                 "count": result.count,
-                "next": self._page_url(request, page + 1)
-                if result.has_next
-                else None,
+                "next": self._page_url(request, page + 1) if result.has_next else None,
                 "previous": self._page_url(request, page - 1)
                 if result.has_prev
                 else None,

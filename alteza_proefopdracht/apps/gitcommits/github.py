@@ -47,39 +47,6 @@ def search_repositories(
     return suggestions
 
 
-def suggest_repositories_for_user(
-    query: str,
-    *,
-    token: str,
-    limit: int = DEFAULT_REPO_SUGGESTION_LIMIT,
-) -> list[str]:
-    query = (query or "").strip().lower()
-    if not query:
-        return []
-
-    limit = max(limit, 1)
-    client = get_github_client(token=token, per_page=100)
-    user = client.get_user()
-
-    suggestions: list[str] = []
-    seen: set[str] = set()
-
-    for repo in user.get_repos():
-        full_name = getattr(repo, "full_name", None)
-        if not full_name:
-            continue
-        if query not in full_name.lower():
-            continue
-        if full_name in seen:
-            continue
-        seen.add(full_name)
-        suggestions.append(full_name)
-        if len(suggestions) >= limit:
-            break
-
-    return suggestions
-
-
 def get_repository(repo_name: str, *, token: str | None = None) -> GitRepository:
     client = get_github_client(token=token)
     try:
@@ -114,6 +81,7 @@ def get_repository_branches(
     branches = github_repo.get_branches()
 
     return [GitBranch(repository=repo, name=branch.name) for branch in branches]
+
 
 def get_branch_commits(
     repo_name: str,
