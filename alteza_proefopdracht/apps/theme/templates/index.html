@@ -35,7 +35,9 @@
         <section class="rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
             <div class="grid gap-0 lg:grid-cols-2">
                 <div class="p-8 sm:p-10">
-                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">{% trans "GitHub Commits" %}</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                        {% trans "GitHub Commits" %}
+                    </p>
                     <h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">
                         {% trans "Search commits by repository and date range." %}
                     </h1>
@@ -58,7 +60,9 @@
                             {% else %}
                                 <p class="form-help">
                                     {{ form.repo.help_text }}
-                                    {% blocktrans trimmed %}Start typing to search GitHub.{% endblocktrans %}
+                                    {% blocktrans trimmed %}
+                                        Start typing to search GitHub.
+                                    {% endblocktrans %}
                                 </p>
                             {% endif %}
                         </div>
