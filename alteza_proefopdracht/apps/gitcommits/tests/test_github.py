@@ -45,7 +45,7 @@ def test_get_branch_commits():
     if branches is None or len(branches) == 0:
         assert False, "Branches should not be empty"
     branch = branches[0]
-    commits = get_branch_commits(repo_name, branch.name)
+    commits, _ = get_branch_commits(repo_name, branch.name)
     assert commits is not None
     assert len(list(commits)) > 0
 
@@ -59,7 +59,7 @@ def test_get_first_commit_message():
     if branches is None or len(branches) == 0:
         assert False, "Branches should not be empty"
     branch_name = branches[0].name
-    commits = get_branch_commits(repo_name, branch_name)
+    commits, _ = get_branch_commits(repo_name, branch_name)
     if commits is None or len(list(commits)) == 0:
         assert False, "Commits should not be empty"
     first_commit = commits[0]
@@ -75,7 +75,7 @@ def test_get_first_commit_author():
     if branches is None or len(branches) == 0:
         assert False, "Branches should not be empty"
     branch_name = branches[0].name
-    commits = get_branch_commits(repo_name, branch_name)
+    commits, _ = get_branch_commits(repo_name, branch_name)
     if commits is None or len(list(commits)) == 0:
         assert False, "Commits should not be empty"
     first_commit = commits[0]
