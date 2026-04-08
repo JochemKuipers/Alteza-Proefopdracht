@@ -22,6 +22,7 @@ from alteza_proefopdracht.apps.gitcommits.views import ProfileView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("i18n/", include("django.conf.urls.i18n")),
     path("accounts/profile/", ProfileView.as_view(), name="account_profile"),
     path("accounts/", include("allauth.urls")),
     path("", include("alteza_proefopdracht.apps.gitcommits.urls")),

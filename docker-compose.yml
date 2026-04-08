@@ -1,0 +1,29 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      UV_PROJECT_ENVIRONMENT: /opt/venv
+    volumes:
+      - .:/app
+      - venv:/opt/venv
+      # Settings expect this file to exist; create from .env.example.
+      - ./alteza_proefopdracht/settings/.env:/app/alteza_proefopdracht/settings/.env:ro
+    command: uv run python manage.py runserver 0.0.0.0:8000 --settings=alteza_proefopdracht.settings.local
+
+  # Optional (only needed if you're actively using django-tailwind watcher)
+  tailwind:
+    build: .
+    environment:
+      UV_PROJECT_ENVIRONMENT: /opt/venv
+    volumes:
+      - .:/app
+      - venv:/opt/venv
+      - ./alteza_proefopdracht/settings/.env:/app/alteza_proefopdracht/settings/.env:ro
+    command: uv run python manage.py tailwind start
+    depends_on:
+      - web
+
+volumes:
+  venv:

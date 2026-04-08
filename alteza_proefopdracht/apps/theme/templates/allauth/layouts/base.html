@@ -28,10 +28,24 @@
                             Alteza
                         </span>
                     </a>
-                    <span class="hidden text-sm text-slate-500 sm:inline dark:text-slate-400">GitHub commits viewer</span>
+                    <span class="hidden text-sm text-slate-500 sm:inline dark:text-slate-400">{% trans "GitHub commits viewer" %}</span>
                 </div>
                 <nav class="flex items-center gap-1">
                     {% include "partials/theme_toggle.html" %}
+                    <form method="post"
+                          action="{% url 'set_language' %}"
+                          class="ml-1"
+                          aria-label="{% trans 'Language selector' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        <select name="language"
+                                class="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 focus:border-slate-300 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-600"
+                                onchange="this.form.submit()">
+                            <option value="en" {% if CURRENT_LANGUAGE == "en" %}selected{% endif %}>EN</option>
+                            <option value="nl" {% if CURRENT_LANGUAGE == "nl" %}selected{% endif %}>NL</option>
+                        </select>
+                    </form>
                     <a class="nav-link" href="{% url 'index' %}">{% trans "Home" %}</a>
                     {% if request.user.is_authenticated %}
                         <a class="nav-link" href="{% url 'account_profile' %}">{% trans "Profile" %}</a>
@@ -68,11 +82,11 @@
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <p class="m-0">Alteza Proefopdracht</p>
                     <p class="m-0">
-                        Built with Django + Tailwind ·
+                        {% trans "Built with Django + Tailwind" %} ·
                         <a class="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
-                           href="https://github.com"
+                           href="https://github.com/JochemKuipers/Alteza-Proefopdracht"
                            target="_blank"
-                           rel="noopener noreferrer">GitHub</a>
+                           rel="noopener noreferrer">{% trans "GitHub" %}</a>
                     </p>
                 </div>
             </div>

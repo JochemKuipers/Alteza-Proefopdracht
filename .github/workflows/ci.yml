@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-and-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: "pip"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies (incl. dev)
+        run: uv sync --frozen --group dev
+
+      - name: Lint (ruff)
+        run: make lint-check
+
+      - name: Format check (ruff + djlint)
+        run: make format-check
+
+      - name: Tests (pytest)
+        env:
+          DJANGO_SETTINGS_MODULE: alteza_proefopdracht.settings.tests
+        run: make test

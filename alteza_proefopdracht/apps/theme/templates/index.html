@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static i18n %}
 {% block extra_styles %}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
           rel="stylesheet" />
@@ -35,12 +35,14 @@
         <section class="rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
             <div class="grid gap-0 lg:grid-cols-2">
                 <div class="p-8 sm:p-10">
-                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">GitHub Commits</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">{% trans "GitHub Commits" %}</p>
                     <h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">
-                        Search commits by repository and date range.
+                        {% trans "Search commits by repository and date range." %}
                     </h1>
                     <p class="mt-4 max-w-xl text-base text-slate-600 dark:text-slate-400">
-                        Enter a repository (like <span class="font-semibold text-slate-900 dark:text-slate-100">django/django</span>) and optionally filter by branch and author.
+                        {% blocktrans trimmed %}
+                            Enter a repository (like <span class="font-semibold text-slate-900 dark:text-slate-100">django/django</span>) and optionally filter by branch and author.
+                        {% endblocktrans %}
                     </p>
                     {% if error %}
                         <div class="mt-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 dark:border-rose-900/60 dark:bg-rose-950/50 dark:text-rose-200">
@@ -49,24 +51,27 @@
                     {% endif %}
                     <form method="get" class="mt-8 space-y-5">
                         <div>
-                            <label class="form-label" for="repo-select">Repository</label>
+                            <label class="form-label" for="repo-select">{% trans "Repository" %}</label>
                             <select id="repo-select" name="repo" class="w-full"></select>
                             {% if form.repo.errors %}
                                 <p class="form-help text-rose-700">{{ form.repo.errors|striptags }}</p>
                             {% else %}
-                                <p class="form-help">{{ form.repo.help_text }} Start typing to search GitHub.</p>
+                                <p class="form-help">
+                                    {{ form.repo.help_text }}
+                                    {% blocktrans trimmed %}Start typing to search GitHub.{% endblocktrans %}
+                                </p>
                             {% endif %}
                         </div>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
-                                <label class="form-label" for="{{ form.start_date.id_for_label }}">Start date</label>
+                                <label class="form-label" for="{{ form.start_date.id_for_label }}">{% trans "Start date" %}</label>
                                 {{ form.start_date }}
                                 {% if form.start_date.errors %}
                                     <p class="form-help text-rose-700">{{ form.start_date.errors|striptags }}</p>
                                 {% endif %}
                             </div>
                             <div>
-                                <label class="form-label" for="{{ form.end_date.id_for_label }}">End date</label>
+                                <label class="form-label" for="{{ form.end_date.id_for_label }}">{% trans "End date" %}</label>
                                 {{ form.end_date }}
                                 {% if form.end_date.errors %}<p class="form-help text-rose-700">{{ form.end_date.errors|striptags }}</p>{% endif %}
                             </div>
@@ -74,22 +79,22 @@
                         {% if repo_loaded %}
                             <div class="grid gap-4 sm:grid-cols-2">
                                 <div>
-                                    <label class="form-label" for="{{ form.branch.id_for_label }}">Branch</label>
+                                    <label class="form-label" for="{{ form.branch.id_for_label }}">{% trans "Branch" %}</label>
                                     {{ form.branch }}
                                 </div>
                                 <div>
-                                    <label class="form-label" for="{{ form.author.id_for_label }}">Author</label>
+                                    <label class="form-label" for="{{ form.author.id_for_label }}">{% trans "Author" %}</label>
                                     {{ form.author }}
                                 </div>
                             </div>
                             <label class="flex items-center gap-3 text-sm font-semibold text-slate-800 dark:text-slate-200">
                                 {{ form.group_by_author }}
-                                <span>Group results by author</span>
+                                <span>{% trans "Group results by author" %}</span>
                             </label>
                         {% endif %}
                         <div class="flex flex-wrap items-center gap-3">
-                            <button type="submit" class="btn-primary">Search commits</button>
-                            <a class="btn-secondary no-underline" href="{% url 'index' %}">Reset</a>
+                            <button type="submit" class="btn-primary">{% trans "Search commits" %}</button>
+                            <a class="btn-secondary no-underline" href="{% url 'index' %}">{% trans "Reset" %}</a>
                         </div>
                     </form>
                 </div>
@@ -98,12 +103,14 @@
                         <div id="commit-results-root" data-api-url="{% url 'api_commits' %}"></div>
                     {% else %}
                         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                            <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">No results yet</h2>
+                            <h2 class="text-base font-semibold text-slate-900 dark:text-slate-100">{% trans "No results yet" %}</h2>
                             <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                                Enter a repository and optionally a date range, then click <span class="font-semibold text-slate-900 dark:text-slate-100">Search commits</span>.
+                                {% blocktrans trimmed %}
+                                    Enter a repository and optionally a date range, then click <span class="font-semibold text-slate-900 dark:text-slate-100">Search commits</span>.
+                                {% endblocktrans %}
                             </p>
                             <p class="mt-4 text-xs text-slate-500 dark:text-slate-500">
-                                Tip: If you just started Tailwind, refresh once after the CSS finishes building.
+                                {% trans "Tip: If you just started Tailwind, refresh once after the CSS finishes building." %}
                             </p>
                         </div>
                     {% endif %}
@@ -128,7 +135,7 @@
 
         $el.select2({
           width: "100%",
-          placeholder: "owner/repo",
+          placeholder: "{% trans 'owner/repo' %}",
           tags: true,              // allow repos not in suggestions
           selectOnClose: true,
           minimumInputLength: 2,

@@ -26,9 +26,16 @@ reset:
 lint:
 	uv run ruff check . --fix
 
+lint-check:
+	uv run ruff check .
+
 format:
 	uv run ruff format .
 	uv run djlint --reformat .
+
+format-check:
+	uv run ruff format . --check
+	uv run djlint --check .
 
 makemessages:
 	uv run manage.py makemessages -l nl

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-08 14:15+0200\n"
+"POT-Creation-Date: 2026-04-08 14:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,47 +17,49 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:5
+
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:5
 msgid "Sign In"
 msgstr "Inloggen"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:14
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:15
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:8
 msgid "Account"
 msgstr "Account"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:16
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:18
 msgid "Sign in to your account"
 msgstr "Log in op je account"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:18
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:20
 msgid "Use your GitHub account to log in"
 msgstr "Gebruik je GitHub account om in te loggen"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:29
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:30
 msgid "Sign in with GitHub"
 msgstr "Log in met GitHub"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:35
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:36
 msgid "or"
 msgstr "of"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:39
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:40
 msgid "Don't have an account?"
 msgstr "Heb je geen account?"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:42
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:43
 msgid "Sign up"
 msgstr "Registreren"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:63
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:64
 msgid "GitHub Login Not Configured"
 msgstr "GitHub Login Niet Geconfigureerd"
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:66
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:67
 msgid "The GitHub login provider has not been configured in the admin panel."
 msgstr "De GitHub login provider is niet geconfigureerd in het admin paneel."
 
-#: .\alteza_proefopdracht\apps\theme\templates\account\login.html:69
+#: alteza_proefopdracht/apps/theme/templates/account/login.html:70
 msgid ""
 "An administrator must add and configure the GitHub provider in the Django "
 "admin under Social Applications before login will be available."
@@ -65,22 +67,199 @@ msgstr ""
 "Een beheerder moet de GitHub provider toevoegen en configureren in de Django "
 "admin onder Social Applications voordat login beschikbaar is."
 
-#: .\alteza_proefopdracht\apps\theme\templates\allauth\layouts\base.html:21
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:9
+msgid "Your Profile"
+msgstr "Je Profiel"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:10
+msgid "Overview of your Alteza account and linked GitHub identity."
+msgstr "Overzicht van je Alteza account en gekoppelde GitHub identiteit."
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:14
+#, python-format
+msgid "Signed in as %(identity)s"
+msgstr "Ingelogd als %(identity)s"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:22
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:54
+#: alteza_proefopdracht/apps/theme/templates/base.html:56
+msgid "Log out"
+msgstr "Log uit"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:30
+msgid "User Details"
+msgstr "Gebruikersdetails"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:33
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:39
+msgid "Email"
+msgstr "Email"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:45
+msgid "First Name"
+msgstr "Voornaam"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:51
+msgid "Last Name"
+msgstr "Achternaam"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:59
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:89
+#: alteza_proefopdracht/apps/theme/templates/base.html:80
+msgid "GitHub"
+msgstr "GitHub"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:64
+msgid "GitHub avatar"
+msgstr "GitHub avatar"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:68
+msgid "Provider"
+msgstr "Provider"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:74
+msgid "Account Name"
+msgstr "Accountnaam"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:81
+msgid "Profile Link"
+msgstr "Profiellink"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:86
+msgid "Visit on GitHub"
+msgstr "Bezoek op GitHub"
+
+#: alteza_proefopdracht/apps/theme/templates/account/profile.html:92
+msgid "No GitHub social account is linked yet."
+msgstr "Er is nog geen GitHub social account gekoppeld."
+
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:21
+#: alteza_proefopdracht/apps/theme/templates/base.html:23
 msgid "Skip to content"
 msgstr "Spring naar inhoud"
 
-#: .\alteza_proefopdracht\apps\theme\templates\allauth\layouts\base.html:35
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:31
+#: alteza_proefopdracht/apps/theme/templates/base.html:13
+#: alteza_proefopdracht/apps/theme/templates/base.html:33
+msgid "GitHub commits viewer"
+msgstr "GitHub commits viewer"
+
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:38
+#: alteza_proefopdracht/apps/theme/templates/base.html:40
+msgid "Language selector"
+msgstr ""
+
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:49
+#: alteza_proefopdracht/apps/theme/templates/base.html:51
 msgid "Home"
 msgstr "Home"
 
-#: .\alteza_proefopdracht\apps\theme\templates\allauth\layouts\base.html:37
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:51
+#: alteza_proefopdracht/apps/theme/templates/base.html:53
 msgid "Profile"
 msgstr "Profiel"
 
-#: .\alteza_proefopdracht\apps\theme\templates\allauth\layouts\base.html:40
-msgid "Log out"
-msgstr "Uitloggen"
-
-#: .\alteza_proefopdracht\apps\theme\templates\allauth\layouts\base.html:44
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:58
+#: alteza_proefopdracht/apps/theme/templates/base.html:60
 msgid "Log in"
 msgstr "Inloggen"
+
+#: alteza_proefopdracht/apps/theme/templates/allauth/layouts/base.html:85
+#: alteza_proefopdracht/apps/theme/templates/base.html:76
+msgid "Built with Django + Tailwind"
+msgstr "Gebouwd met Django + Tailwind"
+
+#: alteza_proefopdracht/apps/theme/templates/base.html:14
+msgid "GitHub, commits, viewer"
+msgstr "GitHub, commits, viewer"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:38
+msgid "GitHub Commits"
+msgstr "GitHub Commits"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:40
+msgid "Search commits by repository and date range."
+msgstr "Zoek commits door repository en datum bereik."
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:43
+msgid ""
+"Enter a repository (like <span class=\"font-semibold text-slate-900 "
+"dark:text-slate-100\">django/django</span>) and optionally filter by branch "
+"and author."
+msgstr ""
+"Voer een repository in (bijvoorbeeld <span class=\"font-semibold text-"
+"slate-900 dark:text-slate-100\">django/django</span>) en optioneel filtreer "
+"op branch en auteur."
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:54
+msgid "Repository"
+msgstr "Repository"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:61
+msgid "Start typing to search GitHub."
+msgstr "Begin met typen om op GitHub te zoeken."
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:67
+msgid "Start date"
+msgstr "Startdatum"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:74
+msgid "End date"
+msgstr "Einddatum"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:82
+msgid "Branch"
+msgstr "Branch"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:86
+msgid "Author"
+msgstr "Auteur"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:92
+msgid "Group results by author"
+msgstr "Groep resultaten door auteur"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:96
+msgid "Search commits"
+msgstr "Zoek commits"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:97
+msgid "Reset"
+msgstr "Herstel"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:106
+msgid "No results yet"
+msgstr "Geen resultaten nog"
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:108
+msgid ""
+"Enter a repository and optionally a date range, then click <span "
+"class=\"font-semibold text-slate-900 dark:text-slate-100\">Search commits</"
+"span>."
+msgstr ""
+"Voer een repository in en optioneel een datum bereik, klik dan op <span "
+"class=\"font-semibold text-slate-900 dark:text-slate-100\">Zoek commits</"
+"span>."
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:113
+msgid ""
+"Tip: If you just started Tailwind, refresh once after the CSS finishes "
+"building."
+msgstr ""
+"Tip: Als je net begonnen bent met Tailwind, ververs de pagina een keer na "
+"het laden van de CSS."
+
+#: alteza_proefopdracht/apps/theme/templates/index.html:138
+msgid "owner/repo"
+msgstr "eigenaar/repository"
+
+#: alteza_proefopdracht/apps/theme/templates/partials/theme_toggle.html:5
+msgid "Toggle color theme"
+msgstr "Kleurthema wisselen"
+
+#: alteza_proefopdracht/apps/theme/templates/partials/theme_toggle.html:6
+msgid "Toggle light / dark theme"
+msgstr "Wissel licht / donker thema"

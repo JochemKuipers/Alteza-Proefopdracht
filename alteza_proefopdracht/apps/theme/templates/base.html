@@ -1,4 +1,4 @@
-{% load static tailwind_tags %}
+{% load static tailwind_tags i18n %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,8 +10,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <meta name="description" content="GitHub commits viewer">
-        <meta name="keywords" content="GitHub, commits, viewer">
+        <meta name="description" content="{% trans 'GitHub commits viewer' %}">
+        <meta name="keywords" content="{% trans 'GitHub, commits, viewer' %}">
         {% include "partials/theme_head.html" %}
         {% tailwind_css %}
         {% block extra_head %}
@@ -20,7 +20,7 @@
     <body class="min-h-dvh flex flex-col">
         <a href="#main"
            class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:shadow dark:focus:bg-slate-900 dark:focus:text-slate-100">
-            Skip to content
+            {% trans "Skip to content" %}
         </a>
         <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-800/80 dark:bg-slate-950/80">
             <div class="container-page flex h-16 items-center justify-between">
@@ -30,20 +30,34 @@
                             Alteza
                         </span>
                     </a>
-                    <span class="hidden text-sm text-slate-500 sm:inline dark:text-slate-400">GitHub commits viewer</span>
+                    <span class="hidden text-sm text-slate-500 sm:inline dark:text-slate-400">{% trans "GitHub commits viewer" %}</span>
                 </div>
                 <nav class="flex items-center gap-1">
                     {% include "partials/theme_toggle.html" %}
-                    <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    <form method="post"
+                          action="{% url 'set_language' %}"
+                          class="ml-1"
+                          aria-label="{% trans 'Language selector' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        <select name="language"
+                                class="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 focus:border-slate-300 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-600"
+                                onchange="this.form.submit()">
+                            <option value="en" {% if CURRENT_LANGUAGE == "en" %}selected{% endif %}>EN</option>
+                            <option value="nl" {% if CURRENT_LANGUAGE == "nl" %}selected{% endif %}>NL</option>
+                        </select>
+                    </form>
+                    <a class="nav-link" href="{% url 'index' %}">{% trans "Home" %}</a>
                     {% if request.user.is_authenticated %}
-                        <a class="nav-link" href="{% url 'account_profile' %}">Profile</a>
+                        <a class="nav-link" href="{% url 'account_profile' %}">{% trans "Profile" %}</a>
                         <form method="post" action="{% url 'account_logout' %}" class="ml-1">
                             {% csrf_token %}
-                            <button type="submit" class="btn-secondary">Log out</button>
+                            <button type="submit" class="btn-secondary">{% trans "Log out" %}</button>
                         </form>
                     {% else %}
                         <a class="btn-primary ml-1 no-underline"
-                           href="{% url 'account_login' %}">Log in</a>
+                           href="{% url 'account_login' %}">{% trans "Log in" %}</a>
                     {% endif %}
                 </nav>
             </div>
@@ -59,11 +73,11 @@
                 <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <p class="m-0">Alteza Proefopdracht</p>
                     <p class="m-0">
-                        Built with Django + Tailwind ·
+                        {% trans "Built with Django + Tailwind" %} ·
                         <a class="text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100"
                            href="https://github.com"
                            target="_blank"
-                           rel="noopener noreferrer">GitHub</a>
+                           rel="noopener noreferrer">{% trans "GitHub" %}</a>
                     </p>
                 </div>
             </div>

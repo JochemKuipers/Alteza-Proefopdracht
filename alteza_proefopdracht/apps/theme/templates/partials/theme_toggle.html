@@ -1,8 +1,9 @@
+{% load i18n %}
 <button type="button"
         id="theme-toggle"
         class="btn-ghost shrink-0 p-2"
-        aria-label="Toggle color theme"
-        title="Toggle light / dark theme">
+        aria-label="{% trans 'Toggle color theme' %}"
+        title="{% trans 'Toggle light / dark theme' %}">
     <span class="block dark:hidden" aria-hidden="true">
         <svg class="h-5 w-5"
              viewBox="0 0 24 24"
