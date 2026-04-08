@@ -6,7 +6,6 @@ from alteza_proefopdracht.apps.gitcommits.github import (
     get_github_client,
     get_repository,
     get_repository_branches,
-    get_user_repositories,
 )
 
 repo_name = "django/django"
